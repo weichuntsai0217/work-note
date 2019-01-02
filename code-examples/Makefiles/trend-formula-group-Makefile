@@ -1,0 +1,290 @@
+# ex:ts=4:sw=4:noexpandtab
+
+DEV_REPO=trendjimmytsai/ft-dev:latest
+DEFAULT_DEV_CTN=ft-dev
+DEV_CTN_MAPPING_DIR=/trend-formula-group
+PROD_IMAGE=formula-trend
+PROD_CTN=formula-trend
+GAME_PORT=4567
+FT_PERF_LOG_KEY=FT_PERF_LOG
+FT_PERF_LOG_VAL=TRUE
+REGISTRY=ai.registry.trendmicro.com
+PRAC_TAG=rank
+RANK_1_TAG=rank.1
+RANK_2_TAG=rank.2
+RANK_3_TAG=rank.3
+TOKEN_FILE=.dev-token
+DEV_CTN=${shell test -f ${TOKEN_FILE} && cat .dev-token | awk '{print $0;}' || echo '${DEFAULT_DEV_CTN}' }
+TMP_FOLDER=${shell echo "tmp-`date +%s`"}
+DOCKER_CONFIGS_FOLDER=docker_configs
+ALL_TEAMS=${shell find ./${DOCKER_CONFIGS_FOLDER} -maxdepth 1 -mindepth 1 -type d | sed 's/.\/${DOCKER_CONFIGS_FOLDER}\///g' }
+LOADED_PATTERN=s/Loaded image: //g
+
+dev-token:
+ifdef DEVUSER
+	echo "${DEVUSER}-`date +%m-%d-%H-%M-%S`" > ${TOKEN_FILE}
+else
+	@echo "ERROR! Please provide your dev user name. Example: 'make dev-token DEVUSER=jimmy' "
+endif
+
+rm-token:
+	rm ${TOKEN_FILE}
+
+build-dev:
+	cp ${PWD}/build_config/Dockerfile_dev ${PWD}/Dockerfile
+	docker build -t ${DEV_REPO} .
+	rm ${PWD}/Dockerfile
+
+push-dev:
+	docker push ${DEV_REPO}
+
+pull-dev:
+	docker pull ${DEV_REPO}
+
+run-dev:
+ifeq (${DEV_CTN}, ${DEFAULT_DEV_CTN})
+	docker run --name ${DEV_CTN} -v ${PWD}:${DEV_CTN_MAPPING_DIR} -p ${GAME_PORT}:${GAME_PORT} -dt ${DEV_REPO}
+else
+	docker run --name ${DEV_CTN} -v ${PWD}:${DEV_CTN_MAPPING_DIR} -dt ${DEV_REPO}
+endif
+
+enter-dev:
+	docker exec -it ${DEV_CTN} bash
+
+stop-dev:
+	docker stop ${DEV_CTN}
+
+stop-using-game-port-ctn:
+	docker stop $$(docker ps | grep '${GAME_PORT}->${GAME_PORT}/tcp' | awk {' print $$1 '})
+
+rm-dev:
+	docker rm ${DEV_CTN}
+
+start-dev:
+	docker start ${DEV_CTN}
+
+build-prod:
+	@mkdir ${PWD}/${TMP_FOLDER}
+	@mv ${PWD}/app/data ${PWD}/${TMP_FOLDER}/data || true
+	@mv ${PWD}/app/model-*.h5 ${PWD}/${TMP_FOLDER}/ || true
+	cp ${PWD}/build_config/Dockerfile_prod ${PWD}/Dockerfile
+	docker build -t ${PROD_IMAGE} .
+	rm ${PWD}/Dockerfile
+	@mv ${PWD}/${TMP_FOLDER}/data ${PWD}/app/data || true
+	@mv ${PWD}/${TMP_FOLDER}/model-*.h5 ${PWD}/app/ || true
+	@rm -rf ${PWD}/${TMP_FOLDER}
+
+build-perf-log-prod:
+	@mkdir ${PWD}/${TMP_FOLDER}
+	@mv ${PWD}/app/data ${PWD}/${TMP_FOLDER}/data || true
+	@mv ${PWD}/app/model-*.h5 ${PWD}/${TMP_FOLDER}/ || true
+	cp ${PWD}/build_config/Dockerfile_prod ${PWD}/Dockerfile
+	docker build --build-arg ${FT_PERF_LOG_KEY}=${FT_PERF_LOG_VAL} -t ${PROD_IMAGE} .
+	rm ${PWD}/Dockerfile
+	@mv ${PWD}/${TMP_FOLDER}/data ${PWD}/app/data || true
+	@mv ${PWD}/${TMP_FOLDER}/model-*.h5 ${PWD}/app/ || true
+	@rm -rf ${PWD}/${TMP_FOLDER}
+
+run-prod:
+	docker run --name ${PROD_CTN}  -p ${GAME_PORT}:${GAME_PORT} -d ${PROD_IMAGE}
+	docker ps
+
+enter-prod:
+	docker exec -it ${PROD_CTN} bash
+
+stop-prod:
+	docker stop ${PROD_CTN}
+
+rm-prod:
+	docker rm ${PROD_CTN}
+
+start-prod:
+	docker start ${PROD_CTN}
+
+rm-prod-image:
+	make stop-prod || true
+	make rm-prod || true
+	docker rmi ${PROD_IMAGE} || true
+
+combo-prod:
+	make rm-prod-image
+	make build-prod
+	make stop-using-game-port-ctn || true
+	make run-prod
+
+combo-perf-log-prod:
+	make rm-prod-image
+	make build-perf-log-prod
+	make stop-using-game-port-ctn || true
+	make run-prod
+
+login:
+	docker login ${REGISTRY}
+
+push-prac-prod:
+ifdef TEAM
+	docker tag ${PROD_IMAGE} ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${PRAC_TAG}
+	docker --config ./${DOCKER_CONFIGS_FOLDER}/${TEAM} push ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${PRAC_TAG}
+	docker rmi ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${PRAC_TAG}
+else
+	@echo "ERROR! Please provide your TEAM number. Example: 'make push-prac-prod TEAM=123' "
+endif
+
+pull-prac-prod:
+ifdef TEAM
+	docker --config ./${DOCKER_CONFIGS_FOLDER}/${TEAM} pull ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${PRAC_TAG}
+	make tag-prod-image-to-old
+	docker tag ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${PRAC_TAG} ${PROD_IMAGE}
+	docker rmi ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${PRAC_TAG}
+	make stop-using-game-port-ctn || true
+	make run-prod
+else
+	@echo "ERROR! Please provide your TEAM number. Example: 'make pull-prac-prod TEAM=123' "
+endif
+
+push-rank1-prod:
+ifdef TEAM
+	docker tag ${PROD_IMAGE} ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_1_TAG}
+	docker --config ./${DOCKER_CONFIGS_FOLDER}/${TEAM} push ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_1_TAG}
+	docker rmi ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_1_TAG}
+else
+	@echo "ERROR! Please provide your TEAM number. Example: 'make push-rank1-prod TEAM=123' "
+endif
+
+pull-rank1-prod:
+ifdef TEAM
+	docker --config ./${DOCKER_CONFIGS_FOLDER}/${TEAM} pull ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_1_TAG}
+	make tag-prod-image-to-old
+	docker tag ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_1_TAG} ${PROD_IMAGE}
+	docker rmi ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_1_TAG}
+	make stop-using-game-port-ctn || true
+	make run-prod
+else
+	@echo "ERROR! Please provide your TEAM number. Example: 'make pull-rank1-prod TEAM=123' "
+endif
+
+push-rank2-prod:
+ifdef TEAM
+	docker tag ${PROD_IMAGE} ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_2_TAG}
+	docker --config ./${DOCKER_CONFIGS_FOLDER}/${TEAM} push ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_2_TAG}
+	docker rmi ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_2_TAG}
+else
+	@echo "ERROR! Please provide your TEAM number. Example: 'make push-rank2-prod TEAM=123' "
+endif
+
+pull-rank2-prod:
+ifdef TEAM
+	docker --config ./${DOCKER_CONFIGS_FOLDER}/${TEAM} pull ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_2_TAG}
+	make tag-prod-image-to-old
+	docker tag ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_2_TAG} ${PROD_IMAGE}
+	docker rmi ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_2_TAG}
+	make stop-using-game-port-ctn || true
+	make run-prod
+else
+	@echo "ERROR! Please provide your TEAM number. Example: 'make pull-rank2-prod TEAM=123' "
+endif
+
+push-rank3-prod:
+ifdef TEAM
+	docker tag ${PROD_IMAGE} ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_3_TAG}
+	docker --config ./${DOCKER_CONFIGS_FOLDER}/${TEAM} push ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_3_TAG}
+	docker rmi ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_3_TAG}
+else
+	@echo "ERROR! Please provide your TEAM number. Example: 'make push-rank3-prod TEAM=123' "
+endif
+
+pull-rank3-prod:
+ifdef TEAM
+	docker --config ./${DOCKER_CONFIGS_FOLDER}/${TEAM} pull ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_3_TAG}
+	make tag-prod-image-to-old
+	docker tag ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_3_TAG} ${PROD_IMAGE}
+	docker rmi ${REGISTRY}/${TEAM}/${PROD_IMAGE}:${RANK_3_TAG}
+	make stop-using-game-port-ctn || true
+	make run-prod
+else
+	@echo "ERROR! Please provide your TEAM number. Example: 'make pull-rank3-prod TEAM=123' "
+endif
+
+multi-push-prac-prod:
+ifdef TEAMS
+	@for t in ${TEAMS} ; do \
+		echo "" ; \
+		make push-prac-prod TEAM=$$t ; \
+	done
+else
+	@echo "ERROR! Please provide TEAM numbers. Example: make multi-push-prac-prod TEAMS=\"123 456\" "
+endif
+
+multi-push-rank1-prod:
+ifdef TEAMS
+	@for t in ${TEAMS} ; do \
+		echo "" ; \
+		make push-rank1-prod TEAM=$$t ; \
+	done
+else
+	@echo "ERROR! Please provide TEAM numbers. Example: make multi-push-rank1-prod TEAMS=\"123 456\" "
+endif
+
+multi-push-rank2-prod:
+ifdef TEAMS
+	@for t in ${TEAMS} ; do \
+		echo "" ; \
+		make push-rank2-prod TEAM=$$t ; \
+	done
+else
+	@echo "ERROR! Please provide TEAM numbers. Example: make multi-push-rank2-prod TEAMS=\"123 456\" "
+endif
+
+multi-push-rank3-prod:
+ifdef TEAMS
+	@for t in ${TEAMS} ; do \
+		echo "" ; \
+		make push-rank3-prod TEAM=$$t ; \
+	done
+else
+	@echo "ERROR! Please provide TEAM numbers. Example: make multi-push-rank3-prod TEAMS=\"123 456\" "
+endif
+
+all-push-prac-prod:
+	@echo "From ./${DOCKER_CONFIGS_FOLDER}, all teams are ${ALL_TEAMS}"
+	@for t in ${ALL_TEAMS} ; do \
+		echo "" ; \
+		make push-prac-prod TEAM=$$t ; \
+	done
+
+all-push-rank1-prod:
+	@echo "From ./${DOCKER_CONFIGS_FOLDER}, all teams are ${ALL_TEAMS}"
+	@for t in ${ALL_TEAMS} ; do \
+		echo "" ; \
+		make push-rank1-prod TEAM=$$t ; \
+	done
+
+all-push-rank2-prod:
+	@echo "From ./${DOCKER_CONFIGS_FOLDER}, all teams are ${ALL_TEAMS}"
+	@for t in ${ALL_TEAMS} ; do \
+		echo "" ; \
+		make push-rank2-prod TEAM=$$t ; \
+	done
+
+all-push-rank3-prod:
+	@echo "From ./${DOCKER_CONFIGS_FOLDER}, all teams are ${ALL_TEAMS}"
+	@for t in ${ALL_TEAMS} ; do \
+		echo "" ; \
+		make push-rank3-prod TEAM=$$t ; \
+	done
+
+tag-prod-image-to-old:
+	docker tag ${PROD_IMAGE} ${shell echo "old-`date +%m-%d-%H-%M-%S`-"}${PROD_IMAGE} || true
+	make rm-prod-image
+
+load-prod-image:
+ifdef SRC
+	make tag-prod-image-to-old
+	@loaded_image=$$(docker load < ${SRC} | sed '${LOADED_PATTERN}') ; \
+	docker tag $$loaded_image ${PROD_IMAGE} ; \
+	echo "The original loaded image tag is '$$loaded_image'. We now added the tag '${PROD_IMAGE}' on it." ; \
+	make stop-using-game-port-ctn || true
+	make run-prod
+else
+	@echo "ERROR! Please provide the '.tar.gz' or '.tar' of the image in absolute path.\nExample 1: make load-prod-image SRC=/aaa/my_image.tar.gz\nExample 2: make load-prod-image SRC=/aaa/my_image.tar"
+endif

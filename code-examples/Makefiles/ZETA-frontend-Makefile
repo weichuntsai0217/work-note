@@ -1,0 +1,71 @@
+# ex:ts=4:sw=4:noexpandtab
+.PHONY: clean test wtest
+.SILENT: clean
+
+OSGI_DIR=${PWD}/osgi
+PROD_FILE=${OSGI_DIR}/PROD
+PROD_CONT=${shell cat ${PROD_FILE} | awk '{print $0;}'}
+PROD_TYPE=${subst prod=,,${PROD_CONT}}
+PROD_POM_FILE=${PWD}/osgi/pom-${PROD_TYPE}.xml
+POM_FILE=${PWD}/pom.xml
+PRODS = huawei general kopt
+REL_ALL_DIR=${PWD}/releaseall
+TARGET_JAR=${PWD}/target/*.jar
+
+clean:
+	@echo "Start clean up files"
+	@rm -rf ${REL_ALL_DIR} ${POM_FILE} || true
+
+eslint-check:
+	@echo "Start to run eslint"
+	npm run eslint-with-report
+	@echo "Finish eslint check"
+
+unit-test:
+	@echo "Start to run unit tests"
+	npm run test-with-coverage-report
+	@echo "Finish unit tests"
+
+build:install eslint-check unit-test
+	@echo "Start to build ..."
+	npm run build ${PROD_TYPE}
+	@echo "Finish build process ..."
+
+install:
+	@echo "Re-install node modules"
+	@rm -rf ${PWD}/node_modules || true
+	@yarn install --ignore-engines
+	@echo "Finish install node modules"
+
+desc:
+	@echo "Please modified your production in ${PROD_FILE}"
+	@echo "The argument of product type was supported:"
+	@echo "prod=huawei (Huawei version)"
+	@echo "prod=general (General version)"
+	@echo "prod=kopt (K-Opticom version)"
+	@echo "Current production type is '${PROD_TYPE}'"
+ifeq (${PROD_TYPE}, huawei)
+	@echo "Huawei version"
+else ifeq (${PROD_TYPE}, general)
+	@echo "General version"
+else ifeq (${PROD_TYPE}, kopt)
+	@echo "K-Opticom version"
+else
+	${error Production mapping error}
+endif
+
+release:clean install eslint-check unit-test desc
+	test -s ${PROD_POM_FILE} || { echo "The POM file does not exist! Exiting..."; exit 1; }
+	cp ${PROD_POM_FILE} ${POM_FILE}
+	mvn clean package
+	rm ${POM_FILE}
+
+releaseall:clean install eslint-check unit-test
+	mkdir -p ${REL_ALL_DIR}
+	for product in $(PRODS)  ;   do  \
+		test -f ${OSGI_DIR}/pom-$$product.xml || { echo "The POM file does not exist! Exiting..."; exit 1; }; \
+		cp ${OSGI_DIR}/pom-$$product.xml ${POM_FILE}; \
+		mvn clean package; \
+		mv ${TARGET_JAR} ${REL_ALL_DIR}; \
+	done
+	rm ${POM_FILE}

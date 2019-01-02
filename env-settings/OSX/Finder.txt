@@ -1,0 +1,4 @@
+
+* 在Finder中顯示隱藏檔案
+在command line:
+defaults write com.apple.finder AppleShowAllFiles TRUE;\killall Finder
