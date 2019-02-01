@@ -4,11 +4,6 @@
 *.swap
 __MACOSX/
 
-# Compressed/tar files
-*.tar.gz
-*.tgz
-*.zip
-
 # Python derived files
 .ipynb_checkpoints/
 __pycache__/

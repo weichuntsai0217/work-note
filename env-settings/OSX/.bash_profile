@@ -24,11 +24,20 @@ dcbash() {
   local container_name="$1"
   if [ -z "$container_name" ]; then
     echo "Please provide the container name in the 1st argument."
-    echo "For example, dkbash my_container"
+    echo "For example, dcbash my_container"
     return 1
   else
+    docker start $container_name
     docker exec -it $container_name bash
   fi
+}
+
+dcrm() {
+  local args="$@"
+  for ctn in $args; do
+    docker stop $ctn
+    docker rm $ctn
+  done
 }
 
 sptt() {
