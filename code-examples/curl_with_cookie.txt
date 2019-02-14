@@ -1,0 +1,1 @@
+curl -v --cookie "sid=M6FzPy8shkgJHdbUE-Rm3fywh0g" -H "Content-Type: application/json" -H "authorization:ZETA" -X POST http://localhost:8080/rest/object/schds -d '{"schd": {"name": "s3", "description": "", "period": [112]}}'
