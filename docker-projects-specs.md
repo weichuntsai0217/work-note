@@ -61,9 +61,12 @@ output=overlay
 
 # vim 1.1
 * 確認一下為何"yy"複製的結果在host的剪貼簿讀不到... (解決方案必須是Mac OSX, windows, Linux都要可以適用)
+* modelines 改成 2
+* 簡單的c++ 和 java 的IDE方案寫成script, 讓user自己決定是否安裝
 
 # dev-base 1.1
 * Dockerfile的最後一行"ADD https://raw.githubusercontent.com/weichuntsai0217/vim/master/.vimrc /root" 來源URL要改成綁定在某個vim的commit (這次release請綁定vim 1.1)
+* git 版本要裝最新的
 
 # dev-code 1.1
 * Dockerfile的base image改成 weichuntsai/dev-base:1.1
