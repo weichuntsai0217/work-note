@@ -6,8 +6,8 @@ import sys
 
 def build_graph(matches):
   """Check if the argument is a Class.
-    matches:
-      A list of matches, ex: [[teamA, teamB], [teamC, teamD]], [teamA, teamB] means teamA has beaten teamB
+    Args:
+      matches: A list of matches, ex: [[teamA, teamB], [teamC, teamD]], [teamA, teamB] means teamA has beaten teamB
     Returns:
       A dict like:
       {
@@ -43,10 +43,8 @@ def can_team_a_beat_team_b(matches, team_a, team_b):
   visited = {}
   return dfs(graph, team_a, team_b, visited)
 
-
-
-def main():
-  matches = [
+def get_input():
+  return [
     ['a', 'b'],
     ['b', 'c'],
     ['c', 'a'],
@@ -54,6 +52,12 @@ def main():
     ['c', 'r'],
     ['r', 'c'],
   ]
+
+def main():
+  """
+    Worst case time complexity: O(E) where E is the outcome of matches (you traverse every edge then you find the result)
+  """
+  matches = get_input()
   print(can_team_a_beat_team_b(matches, 'a', 'r'))
   print('\n')
   print(can_team_a_beat_team_b(matches, 'a', 'e'))

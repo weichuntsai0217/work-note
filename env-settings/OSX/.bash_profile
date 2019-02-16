@@ -1,5 +1,5 @@
 alias ll='ls -alFh'
-alias backupzeta='node /Users/jimmy_tsai/projects/work-note/utils/backupzeta.js $(PWD)'
+# alias backupzeta='node /Users/jimmy_tsai/projects/work-note/utils/backupzeta.js $(PWD)'
 alias grep='grep --color=always'
 export CLICOLOR="true"
 export LSCOLORS="gxfxcxdxbxegedabagacad"
@@ -13,12 +13,6 @@ export JAVA_HOME="$(/usr/libexec/java_home)"
 
 export PATH="/Applications/HPE_Security/Fortify_SCA_and_Apps_17.10/bin:$PATH"
 export PATH="$HOME/Library/Python/3.7/bin:$PATH"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/jimmy_tsai/google-cloud-sdk/path.bash.inc' ]; then source '/Users/jimmy_tsai/google-cloud-sdk/path.bash.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/jimmy_tsai/google-cloud-sdk/completion.bash.inc' ]; then source '/Users/jimmy_tsai/google-cloud-sdk/completion.bash.inc'; fi
 
 dcbash() {
   local container_name="$1"
