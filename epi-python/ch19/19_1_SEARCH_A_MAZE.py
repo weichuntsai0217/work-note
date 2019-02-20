@@ -6,9 +6,11 @@ import sys
 
 from copy import deepcopy
 
-def can_pass(entrance, exit, maze):
+def get_maze_path(entrance, exit, maze):
   if maze[entrance[0]][entrance[1]] == 0 or maze[exit[0]][exit[1]] == 0: return False
-  return dfs(entrance, exit, maze)
+  path = []
+  dfs(entrance, exit, maze, path)
+  return path
 
 def get_reachable_neighbors(cur, maze):
   reachable_neighbors = []
@@ -23,14 +25,18 @@ def get_reachable_neighbors(cur, maze):
     if nbr and maze[nbr[0]][nbr[1]]: reachable_neighbors.append(nbr)
   return reachable_neighbors
 
-def dfs(cur, exit, maze):
+def dfs(cur, exit, maze, path):
+  path.append(cur)
   if cur == exit: return True
   maze[cur[0]][cur[1]] = 0 # mark the cur point as 0 means this point is visited.
   reachable_neighbors = get_reachable_neighbors(cur, maze)
-  if len(reachable_neighbors) == 0: return False
+  if len(reachable_neighbors) == 0:
+    path.pop(len(path)-1)
+    return False
   for nbr in reachable_neighbors:
-    if dfs(nbr, exit, maze):
+    if dfs(nbr, exit, maze, path):
       return True
+  path.pop(len(path)-1)
   return False
 
 def get_input(not_pass=False):
@@ -56,17 +62,30 @@ def get_input(not_pass=False):
   exit = [0, len(maze_pass[0]) - 1]
   return (entrance, exit, maze_not_pass if not_pass else maze_pass)
 
+def draw_maze(maze):
+  for row in maze:
+    print(row)
+
+def show_result(maze, path):
+  print('Can you pass the maze?', 'Yes' if path else 'No')
+  print('The maze is:')
+  draw_maze(maze)
+  print('The path you find is:')
+  print(path)
+  print('\n\n')
 
 def main():
   """
-    The worst case time complexity is O(maze rows times maze cols),
-    that is the path you find contains every point in the maze (your dfs traverse every point.)
+    The worst case time complexity is O(V + E) where V is the number of vertexes and E is the number of edges.
+    The worst case means that after you traverse all points and then you find a path or a dead end.
   """
   (entrance, exit, maze) = get_input()
-  print('Can you pass the maze?', can_pass(entrance, exit, maze))
+  path = get_maze_path(entrance, exit, deepcopy(maze))
+  show_result(maze, path)
 
   (entrance, exit, maze) = get_input(True)
-  print('Can you pass the maze?', can_pass(entrance, exit, maze))
+  path = get_maze_path(entrance, exit, deepcopy(maze))
+  show_result(maze, path)
 
 if __name__ == '__main__':
   main()
