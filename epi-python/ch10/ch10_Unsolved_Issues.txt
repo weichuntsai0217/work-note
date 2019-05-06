@@ -1,0 +1,5 @@
+1. Please check EPI's solution for 10_15_COMPUTE_THE_EXTERIOR_OF_A_BINARY_TREE.py
+is consistent with your solution.
+It seems that your definition for exterior is different from EPI's solution on some test cases.
+
+2. How to solve postorder without recursive call ?
