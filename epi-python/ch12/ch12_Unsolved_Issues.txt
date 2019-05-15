@@ -1,0 +1,11 @@
+# 12_5_COMPUTE_THE_REAL_SQUARE_ROOT.py
+* I don't know why the time complexity is O(log(x/s))
+
+# 12_7_FINDTHE_MIN_AND_MAX_SIMULTANEOUSLY.py
+* This problem doesn't compare time complexity of assignments. Need to check if assignment cpu cycle is less than comparison (check that if assignment is the performance bottleneck or not.)
+
+# 12_8_FIND_THE_kth_LARGEST_ELEMENT.py
+* Check why epi says its method worst case is O(n^2), you should also study some details about quick sort.
+
+# 12_9_FIND_THE_MISSING_IP_ADDRESS.py
+* Still don't know how to solve it.
