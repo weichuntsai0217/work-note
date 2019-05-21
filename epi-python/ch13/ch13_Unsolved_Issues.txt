@@ -1,0 +1,7 @@
+# Need to understand Hash table boot camp problems.
+
+# 13_7_FIND_THE_SMALLEST_SUBARRAY_COVERING_ALL_VALUES.py
+* Need to understand the 2nd solution which EPI provides.
+
+# 13.14 IMPLEMENTA HASH FUNCTION FOR CHESS
+* Don't figure out a solution yet. You have to try to implement it and also you need to understand EPI's solution.
