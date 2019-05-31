@@ -1,0 +1,28 @@
+# 16_2_GENERATE_ALL_NONATTACKING_PLACEMENTS_OF_n_Queens.py
+* Need to understand how to obtain the approximate form of the time complexity.
+
+# 16_4_GENERATE_THE_POWER_SET.py
+* Need to understand the 2nd EPI solution in page 290.
+
+# 16_5_GENERATE_ALL_SUBSETS_OF_SIZE_k.py
+* Need to understand the EPI's solution and how to obtain time complexity.
+
+# 16_6_GENERATE_STRINGS_OF_MATCHED_PARENS.py
+* Need to understand how to obtain the time complexity.
+
+# 16_7_GENERATE_PALINDROMIC_DECOMPOSITIONS.py
+* Need to understand the 1st paragraph (how to brute force) of solution on page 294.
+
+# 16_8_GENERATE_BINARY_TREES.py
+* Try to evaluate the time complexity of your solution.
+* Implement EPI's solution
+* Need to understand the time complexity of EPI's solution.
+
+# 16_9_IMPLEMENT_A_SUDOKU_SOLVER.py
+* Need to know why n x n sudoku solver has exponential time complexity.
+
+# 16_10_COMPUTE_A_GRAY_CODE.py
+* Need to understand EPI's 1st solution on page 298.
+
+# 16_11_COMPUTE_THE_DIAMETER_OF_A_TREE.py
+* I understand EPI's solution. Wait to implement. 
