@@ -1,0 +1,12 @@
+# For all problems
+* Need to know when to use multi process and when to use multi threads
+* Do more exercises about python multi threads and processes.
+
+# 20_1
+* Can python have any syncronize mechanism for "part of" code in a function or automatically "release lock" after return ?
+
+# 20_3_IMPLEMENT_SYNCHRONIZATION_FOR_TWO_INTERLEAVING_THREADS
+* Check why python's GIL is good for single-thread process but bad for multi-thread process.
+
+# 20_4
+* Need to know the correct thread pool packages in python 2.7.x and 3.6.x
