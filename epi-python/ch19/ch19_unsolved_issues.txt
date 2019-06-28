@@ -1,0 +1,12 @@
+# For all problems
+* Need to know when to use multi process and when to use multi threads
+* Do more exercises about python multi threads and processes.
+* Do more exercises about race condition, deadlock, live lock, starvation.
+* Check why python's GIL is good for single-thread process but bad for multi-thread process.
+* Need to practice socket programming.
+
+# 19_5_deadlock.py
+* Wait EPI's author's feedback. I don't think it is a deadlock case.
+
+# 19.8 implement a timer class
+* Need to provide a implementation.
