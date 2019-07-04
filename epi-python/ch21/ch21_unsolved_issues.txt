@@ -1,0 +1,4 @@
+# 21_1_garbage_collection.txt
+* Need to complete the last 2 questions.
+
+# Need to know how to implement deepcopy for user-defined object.

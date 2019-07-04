@@ -1,0 +1,26 @@
+# What is garbage collection?
+Garbage collection is the process of finding data objects in a running program
+that cannot be accessed in the future, and then to reclaim the resouces, particularly memory
+used by those objects.
+
+# What is a garbage-collected language?
+A garbage-collected language is one language in which the garbage collection happens automatically.
+
+# Give some examples about garbage-collected languages and nongarbage-collected languages.
+Garbage-collected languages: Java, C#, JavaScript, Python, and most scripting language.
+Nongarbage-collected: C
+
+# Do you know some common strategies for garbage collection?
+There are 2 common strategies:
+1. reference counting
+2. tracing
+
+# Compare pros and cons for reference counting and tracing.
+1. https://www.quora.com/How-do-reference-counting-and-garbage-collection-compare
+2. refer to page 346 of EPI in python
+
+# The challenge of implement reference counting and tracing.
+1. The challenge of implement reference counting is "reference cycles", that is, objects A and B
+reference each other, for example, A.u = B and B.v = A. The reference count never drops below 1.
+
+2. The challenge of implementing tracing... (TBD)
