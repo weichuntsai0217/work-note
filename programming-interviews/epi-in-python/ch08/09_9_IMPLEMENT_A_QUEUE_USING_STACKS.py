@@ -12,13 +12,13 @@ class QueueByStack(object):
     self.enq.append(item)
 
   def dequeue(self):
-    """
-      The amortized time complexity is O(1).
-      Why O(1) ? Let's assume the queue is empty at first, then you push k items in the queue (push k times)
-      then you want to pop k items but now dequeue is empty so you have to pop enqueue k times and push to
-      dequeue k times, and finally you do pop k times from dequeue. In the above process,
-      you do 4*k times operation on k items, so each item take 4k/k = 4 times operation, that is O(4) = O(1)
-    """
+		""" 
+			The amortized time complexity is O(1).
+			Why O(1) ? Let's assume the queue is empty at first, then you push k items in the queue (push k times)
+			then you want to pop k items. But now `self.deq` is empty so you have to pop `self.enq` k times and push
+			these k items into `self.deq`, and finally you have to pop k times from `self.deq`. In the above process,
+			you do 4*k times operation on k items, so each item take 4k/k = 4 times operation, that is O(4) = O(1)
+		"""
     if not self.deq:
       while self.enq:
         self.deq.append(self.enq.pop())
