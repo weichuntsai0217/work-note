@@ -42,6 +42,29 @@ def is_palindromic_less_space(head):
   while fast and fast.nxt:
     slow = slow.nxt
     fast = fast.nxt.nxt
+  """
+    If the list length is an odd number, after the above while loop ended
+    `fast` is the tail node and `slow` now is the middle node of the list, not the
+    first node of the second half list, e.g.,
+    ```
+      1 => 2 => 3 => 2 => 1
+               slow       fast
+    ```
+    You might think that for this odd length case, why we don't move `slow` to next node
+    to make it the first node of the second half list?
+    That's because after we reverse the second half list, it would be
+    ```
+      1 => 2 => 3 <= 2 <= 1
+      head                slow
+    ```
+    That is, the first half and second half heads both point to `3`(the middle node of the original list)
+    and this would not affect our testing result.
+    Feel free to 2 lines immediately after the while loop like:
+    ```
+      if fast: slow = slow.nxt
+    ```
+    if you are not comfortable with the original scheme.
+  """
 
   first_half_iter = head
   second_half_iter = reverse_list(slow)

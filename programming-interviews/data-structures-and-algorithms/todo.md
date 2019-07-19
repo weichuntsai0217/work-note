@@ -1,17 +1,18 @@
+* add a self question "explain python's list slicing" in EPI in python
 * array_vs_linked_list.md
 
 * Common sequence(array/singly-linked list) operations
-  - Rotate a sequence with given shift
-    1. not in place
-    2. in place
+  - Rotate a sequence with given shift, start and end (end is the last idx + 1)
+    1. not in place (array: done)
+    2. in place (array: not yet | linked list: done )
   - Remove duplicates in a sequence
-    1. the sequence is sorted.
-    2. the sequence is not sorted.
-  - Merge two sorted sequence
-  - Reverse a sequence with given start and end index
-  - Check if a sequence is palidromic with given start and end index
-  - Pivot a sequence
-  - Check is a singly-linked list cyclic
+    1. the sequence is sorted. (array: done | linked list: done )
+    2. the sequence is not sorted. (array: done | linked list: done )
+  - Merge two sorted sequence (array: done | linked list: done )
+  - Reverse a sequence with given start and end index (array: done | linked list: done )
+  - Check if a sequence is palindromic with given start and end index (array: done | linked list: done )
+  - Partition a sequence (array: done | linked list: done )
+  - Check is a singly-linked list cyclic (linked list: done )
 
 * heap
 * data structures in Cormen's book and EPI in Python
