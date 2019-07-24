@@ -7,7 +7,7 @@
 
   How to implement a quene?
   A queue should support methods:
-  1. `is_empty` with with O(1) time complexity.
+  1. `is_empty` with O(1) time complexity.
   2. `enqueue` with O(1) time complexity.
   3. `dequeue` with O(1) time complexity.
   4. `get_first` with O(1) time complexity.

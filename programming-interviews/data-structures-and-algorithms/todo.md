@@ -14,7 +14,6 @@
   - Partition a sequence (array: done | linked list: done )
   - Check is a singly-linked list cyclic (linked list: done )
 
-* heap
 * data structures in Cormen's book and EPI in Python
 * LRU cache with doubly-linked list
 * hash
