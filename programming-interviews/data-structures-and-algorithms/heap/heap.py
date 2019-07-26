@@ -181,6 +181,8 @@ def use_class_1():
         `heapify` lets the value at position `i` "float down" (like doing bubble sort down to bottom) in the max-heap 
         so that the subtree rooted at index i obeys the max-heap property.
       """
+      """
+      # This is the original version of `MAX-HEAPIFY` on page 154 of ref. 1
       if not isinstance(heap_len, int):
         heap_len = len(nodes)
       l = Heap.left(i)
@@ -193,6 +195,23 @@ def use_class_1():
       if largest != i:
         nodes[i], nodes[largest] = nodes[largest], nodes[i]
         Heap.heapify(nodes, largest, heap_len)
+      """
+      # I change the implement from ref. 1's version into a while loop version to reduce the space complexity.
+      if not isinstance(heap_len, int):
+        heap_len = len(nodes)
+      while i < heap_len:
+        l = Heap.left(i)
+        r = Heap.right(i)
+        largest = i
+        if l < heap_len and nodes[l] > nodes[largest]:
+          largest = l
+        if r < heap_len and nodes[r] > nodes[largest]:
+          largest = r
+        if largest != i:
+          nodes[i], nodes[largest] = nodes[largest], nodes[i]
+          i = largest
+        else:
+          break
 
     @staticmethod
     def build_heap(nodes):

@@ -1,3 +1,6 @@
+
+* sorting (including python's built-in sort/sorted, what is an average case? is average case related to complexity of 
+probability algorithms?)
 * add a self question "explain python's list slicing" in EPI in python
 * array_vs_linked_list.md
 

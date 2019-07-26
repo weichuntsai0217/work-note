@@ -1,6 +1,11 @@
 """
   Use python 3.6.8
 """
+"""
+  # References
+  1. Thomas H. Cormen et al., "Introduction to Algorithms, 3rd" (2009).
+"""
+
 import copy
 from collections import deque
 
@@ -170,7 +175,7 @@ def merge_two_sorted_arrays(a, b):
 
 def merge_two_adjacent_subarrays_in_a_src_array(src, p, q, r):
   """
-    The implement is from page 31 of Thomas H. Cormen et al., "Introduction to Algorithms, 3rd" (2009).
+    The implement is from page 31 of ref. 1.
     This function is usually used in merge sort.
     The first subarray is from p ~ q (inclusive)
     and the second subarray is from q + 1 ~ r (inclusive)
@@ -250,12 +255,13 @@ def reverse_with_copy(array, start=None, end=None): # the subarray we want to re
   reverse_in_place(copy_array, start, end)
   return copy_array
 
-def partition(array, p, r): # the subarray we want to reverse is from start ~ end (inclusive)
+def partition(array, p, r): # the subarray we want to partition is from p ~ r (inclusive)
   """
-    The implement is from page 31 of Thomas H. Cormen et al., "Introduction to Algorithms, 3rd" (2009).
+    The implement is from page 171 of ref. 1.
     This algorithm can be used in
     1. quick sort
-    2. sorting an array with 3 kind of items (you just do partition twice.)
+    2. sorting an array with 3 kind of items (assume you know the initial index of the 2nd largest item),
+       and you just do partition twice.
   """
   x = array[r] # always choose the last item of the subarray as pivot
   i = p - 1

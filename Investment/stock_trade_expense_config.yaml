@@ -1,0 +1,68 @@
+---
+# We only support USD(美元) and TWD(新台幣) now.
+# show_currency: USD # USD(美元) or TWD(新台幣), need to from command line arg
+# rate: 0.0317811 # need to from command line arg
+# if currency is USD, then we change twd into usd by twd x rate
+# if currency is TWD, then we change usd into twd by usd x rate
+
+# rate = percent / 100.
+securities_dealers:
+-
+  dealer_name: First Trade
+  currency: USD
+  share_price_threshold: 1 # Valid values could be Null(no threshold) or positive numbers.
+  charge_rules_for_buy:
+    main:
+      fixed_fee: 0
+      commission:
+        min_fee: 0
+        rate: 0
+        per_share: 0
+      other_rate: 0.0000207 # 0.0000207 for SEC fee
+    less_than_share_price_threshold:
+      fixed_fee: 0
+      other_rate: 0
+  charge_rules_for_sell:
+    main:
+      fixed_fee: 0
+      other_rate: 0
+    less_than_share_price_threshold:
+      fixed_fee: 0
+      other_rate: 0
+    day_trade: # 當沖，即同日買進又賣出
+      fixed_fee: 0
+      other_rate: 0
+    break_min_owning_time: # break minimum owning time.
+      fixed_fee: 0
+      other_rate: 0
+    capital_gains:
+      fixed_fee: 0
+      other_rate: 0
+-
+  dealer_name: 元大證券
+  currency: TWD
+  share_price_threshold: Null # Valid values could be Null(no threshold) or positive numbers.
+  charge_rules_for_buy:
+    main:
+      fixed_fee: 0
+      other_rate: 0
+    less_than_share_price_threshold:
+      fixed_fee: 0
+      other_rate: 0
+  charge_rules_for_sell:
+    main:
+      fixed_fee: 0
+      other_rate: 0
+    less_than_share_price_threshold:
+      fixed_fee: 0
+      other_rate: 0
+    day_trade: # 當沖，即同日買進又賣出
+      fixed_fee: 0
+      other_rate: 0
+    break_min_owning_time: # break minimum owning time.
+      fixed_fee: 0
+      other_rate: 0
+    capital_gains:
+      fixed_fee: 0
+      other_rate: 0
+...

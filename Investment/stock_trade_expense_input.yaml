@@ -1,0 +1,38 @@
+---
+# show_currency: USD # USD(美元) or TWD(新台幣), need to from command line arg
+# rate: 0.0317811 # need to from command line arg
+# if currency is USD, then we change twd into usd by twd x rate
+# if currency is TWD, then we change usd into twd by usd x rate
+
+securities_dealers:
+-
+  dealer_name: First Trade
+  trades:
+  -
+    action: buy
+    stock_name: Facebook, Inc. (FB)
+    shares: 500
+    share_price: 189.02
+  -
+    action: sell
+    stock_name: Facebook, Inc. (FB)
+    shares: 500
+    share_price: 190.02
+    day_trade: False # True or False
+    break_min_owning_time: False # True or False
+-
+  dealer_name: 元大證券
+  trades:
+  -
+    action: buy
+    stock_name: 元大台灣50 (0050)
+    shares: 500
+    share_price: 80
+  -
+    action: sell
+    stock_name: 元大台灣50
+    shares: 500
+    share_price: 81
+    day_trade: False # True or False
+    break_min_owning_time: False # True or False
+...
