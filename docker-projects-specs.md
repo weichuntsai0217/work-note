@@ -4,6 +4,8 @@
   - `$PROJ_NAME$`, ex: 在gen-readme.sh中 `PROJ_NAME=puredoc`
   - `$PROJ_REPO$`, ex: 在gen-readme.sh中 `PROJ_REPO=weichuntsai/${PROJ_NAME}`
   - `$PROJ_VER$`, ex: 在gen-readme.sh中 `PROJ_VER=1.1`
+* 讓contaier 啟動後時區default是使用者電腦的時區, 允許user在container啟動時設定他想要的時區
+* 將.bashrc中的 `alias ll='ls -alF` 改成 `alias ll='ls -alFh'`
 
 # texlive-small 1.1
 * README.md 中提及版本都改成1.1
@@ -66,7 +68,8 @@ output=overlay
 
 # dev-base 1.1
 * Dockerfile的最後一行"ADD https://raw.githubusercontent.com/weichuntsai0217/vim/master/.vimrc /root" 來源URL要改成綁定在某個vim的commit (這次release請綁定vim 1.1)
-* git 版本要裝最新的
+* 舊的git移除, 改成裝目前最新但固定版本的git (版本要寫死, 而非總是描latest)
 
 # dev-code 1.1
 * Dockerfile的base image改成 weichuntsai/dev-base:1.1
+* `Dockerfile`的第19列`RUN npm install --global yarn@1.6.0 eslint` 要改成裝目前最新但固定版本的yarn和eslint (版本要寫死, 而非總是描latest)
