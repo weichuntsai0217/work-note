@@ -38,7 +38,7 @@ exec(
     const gitBranchName = stdout.trim() || 'null'
     const targetZipName = srcFolder + '__branchIs-' + gitBranchName + '.zip'
     const targetZipPath = [targetDir, targetZipName].join('/')
-    const zipCmd = ['zip -r -q', targetZipPath, srcRelativePath, '-x', excludePattern].join(' ')
+    const zipCmd = ['zip --symlinks -r -q', targetZipPath, srcRelativePath, '-x', excludePattern].join(' ')
     console.log('Source Directory: ', srcDir)
     console.log('Current Git Branch: ', gitBranchName)
     console.log('Target Zip: ', targetZipPath)
