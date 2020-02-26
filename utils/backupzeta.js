@@ -17,7 +17,7 @@ const targetDirMap = {
   'exp-mgr': '/Users/jimmy_tsai/GoogleDrive/TrendMicro_Jimmy/projects'
 }
 const srcRelativePath = './' + srcFolder
-const excludePattern = srcRelativePath + '/node_modules/**\\*'
+const excludePattern = '*/node_modules/\\*'
 /**
  * User defined data - END
  */
