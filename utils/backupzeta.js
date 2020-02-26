@@ -22,7 +22,7 @@ const excludePattern = srcRelativePath + '/node_modules/**\\*'
  * User defined data - END
  */
  
-const targetDir = targetDirMap[srcFolder]
+const targetDir = targetDirMap[srcFolder] || '.'
 if (!fs.existsSync(targetDir)) {
   throw 'The targetDir does not exist. Please set targetDir in targetDirMap.'
 }

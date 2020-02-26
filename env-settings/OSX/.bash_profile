@@ -1,5 +1,6 @@
 alias ll='ls -alFh'
-# alias backupzeta='node /Users/jimmy_tsai/projects/work-note/utils/backupzeta.js $(PWD)'
+# alias backupzeta="node /Users/liubae/myfiles/projects/work-note/utils/backupzeta.js"
+# How to run backupzeta? `$ backupzeta /aa/bb` -> compress the folder 'bb' at absolute path '/aa/bb' and the output zip file would be 'bb.zip' at absolute path '/aa'
 alias grep='grep --color=always'
 export CLICOLOR="true"
 # export LSCOLORS="gxfxcxdxbxegedabagacad"
